@@ -2,8 +2,6 @@
 INSTALL_PATH=$(dirname ${BASH_SOURCE[0]})
 . $INSTALL_PATH/.env.sh
 
-sudo sh -c "echo '$USER ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/$USER"
-sudo sed -ie 's/cr\.archive\.ubuntu\.com/us.archive.ubuntu.com/g' /etc/apt/sources.list
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y curl git arandr openssh-server pavucontrol python3 python3-pip tree python-is-python3

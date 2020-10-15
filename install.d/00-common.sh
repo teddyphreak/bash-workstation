@@ -2,9 +2,10 @@
 INSTALL_PATH=$(dirname $0)
 . $INSTALL_PATH/.env.sh
 
-sudo sed -ie 's/cr\./us./g' /etc/apt/sources.list
+sudo sh -c "echo '$USER ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/$USER"
+sudo sed -ie 's/cr\.archive\.ubuntu\.com/us.archive.ubuntu.com/g' /etc/apt/sources.list
 sudo apt update
 sudo apt upgrade -y
 sudo apt autoclean -y
 sudo apt autoremove -y
-sudo apt install ubuntu-restricted-extras -y
+sudo apt install ubuntu-restricted-extras libxml2-dev libxslt1-dev build-essential xsel httpie -y
