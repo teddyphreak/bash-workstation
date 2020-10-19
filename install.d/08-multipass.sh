@@ -44,14 +44,14 @@ if [ -f ~/.ssh/id_rsa.pub ]; then
         echo Name argument is required
       else
         INSTANCE_IP=\$($MULTIPASS info \$2 --format json | jq ".info[\"\$2\"].ipv4[0]" -r)
-        ssh \$USER@\@\$INSTANCE_IP -i ~/.ssh/id_rsa
+        ssh \$USER@\$INSTANCE_IP -i ~/.ssh/id_rsa
       fi
     elif [[ "\$1" == "launch" ]]; then
 			cat <<-DONE > \$CLINIT
 			users:
 			  - name: \$USER
 			    shell: \$SHELL
-			    uid: 1001
+			    uid: \$UID
 			    ssh_authorized_keys:
 			      - \$(cat ~/.ssh/id_rsa.pub)
 			DONE
@@ -63,9 +63,9 @@ if [ -f ~/.ssh/id_rsa.pub ]; then
         fi
       fi
       CMDS+=("$MULTIPASS \$* \$EXTRA_ARGS")
-      CMDS+=("$MULTIPASS mount \$HOME \$INSTANCE:\$HOME")
-      CMDS+=("$MULTIPASS mount -u \$UID:1001 /etc/profile.d \$INSTANCE:/etc/profile.d")
-      echo "\$CMDS"
+      CMDS+=("$MULTIPASS mount -u \$UID:\$UID \$HOME \$INSTANCE:\$HOME")
+      CMDS+=("$MULTIPASS mount /etc/profile.d \$INSTANCE:/etc/profile.d")
+      CMDS+=("$MULTIPASS mount /etc/sudoers.d \$INSTANCE:/etc/sudoers.d")
     else
       CMDS+=("$MULTIPASS \$*")
     fi
@@ -77,7 +77,7 @@ else
 fi
 
 # execute commands
-for CMD in "\$CMDS"; do
+for CMD in "\${CMDS[@]}"; do
    echo \$CMD
    \$CMD
 done
