@@ -42,9 +42,11 @@ if [ -f ~/.ssh/id_rsa.pub ]; then
 		if [[ "\$1" == "ssh" ]]; then
       if (( \$# < 2 )); then
         echo Name argument is required
+      elif (( \$# > 2 )); then
+        echo Too many arguments
       else
         INSTANCE_IP=\$($MULTIPASS info \$2 --format json | jq ".info[\"\$2\"].ipv4[0]" -r)
-        ssh \$USER@\$INSTANCE_IP -i ~/.ssh/id_rsa \$*
+        ssh \$USER@\$INSTANCE_IP -i ~/.ssh/id_rsa
       fi
     elif [[ "\$1" == "launch" ]]; then
 			cat <<-DONE > \$CLINIT
