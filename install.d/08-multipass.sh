@@ -10,38 +10,78 @@ if [ ! -f $MULTIPASS ]; then
     sudo snap install multipass --classic
 fi
 
+sudo apt install -y jq
+
 mkdir -p ~/.multipass/bin
 cat <<-EOF > ~/.multipass/bin/multipass
-ORIG_ARGS=("\${@[@]}")
+
+# detect argument name
+ARGS=()
+while [[ \$# -gt 0 ]]; do
+    key="\$1"
+    case \$key in
+        -n|--name)
+        INSTANCE="\$2"
+        ARGS+=("\$1")
+        shift
+        ;;
+        *)
+        ARGS+=("\$1")
+        shift # past argument
+        ;;
+    esac
+done
+set -- "\${ARGS[@]}"
+
+# determine extra arguments and post commands
+CMDS=()
 EXTRA_ARGS=""
 CLINIT=\$(mktemp "./.cloudinit.XXXXXXXXXXXX.yaml")
 if [ -f ~/.ssh/id_rsa.pub ]; then
 	if (( \$# > 0 )); then
-		if [[ "\$1" == "launch" ]]; then
-				cat <<-DONE > \$CLINIT
-				users:
-				  - name: \$USER
-				    shell: \$SHELL
-				    ssh_authorized_keys:
-				      - \$(cat ~/.ssh/id_rsa.pub)
-				DONE
-	      EXTRA_ARGS="--cloud-init \$CLINIT"
-        if ! [[ "$@" =~ "-n" ]]; then
-          if NAME=\$(curl --fail -s https://frightanic.com/goodies_content/docker-names.php); then
-            INSTANCE="\$(echo \$NAME | sed -e 's/_/-/g')"
-            EXTRA_ARGS="\$EXTRA_ARGS -n \$INSTANCE"
-            EXTRA_CMD="$MULTIPASS mount $HOME \$INSTANCE:$HOME"
-          fi
+		if [[ "\$1" == "ssh" ]]; then
+      if (( \$# < 2 )); then
+        echo Name argument is required
+      else
+        INSTANCE_IP=\$($MULTIPASS info \$2 --format json | jq ".info[\"\$2\"].ipv4[0]" -r)
+        ssh \$USER@\@\$INSTANCE_IP -i ~/.ssh/id_rsa
+      fi
+    elif [[ "\$1" == "launch" ]]; then
+			cat <<-DONE > \$CLINIT
+			users:
+			  - name: \$USER
+			    shell: \$SHELL
+			    uid: 1001
+			    ssh_authorized_keys:
+			      - \$(cat ~/.ssh/id_rsa.pub)
+			DONE
+	    EXTRA_ARGS="--cloud-init \$CLINIT"
+      if [ -z \$INSTANCE ]; then
+        if NAME=\$(curl --fail -s https://frightanic.com/goodies_content/docker-names.php); then
+          INSTANCE="\$(echo \$NAME | sed -e 's/_/-/g')"
+          EXTRA_ARGS="\$EXTRA_ARGS -n \$INSTANCE"
         fi
+      fi
+      CMDS+=("$MULTIPASS \$* \$EXTRA_ARGS")
+      CMDS+=("$MULTIPASS mount \$HOME \$INSTANCE:\$HOME")
+      CMDS+=("$MULTIPASS mount -u \$UID:1001 /etc/profile.d \$INSTANCE:/etc/profile.d")
+      echo "\$CMDS"
+    else
+      CMDS+=("$MULTIPASS \$*")
     fi
+  else
+    CMDS+=("$MULTIPASS \$*")
   fi
+else
+  CMDS+=("$MULTIPASS \$*")
 fi
-echo running $MULTIPASS \$@ \$EXTRA_ARGS
-$MULTIPASS \$@ \$EXTRA_ARGS
-if [ ! -z "\$EXTRA_CMD" ]; then
-  echo running \$EXTRA_CMD
-  \$EXTRA_CMD
-fi
+
+# execute commands
+for CMD in "\$CMDS"; do
+   echo \$CMD
+   \$CMD
+done
+
 rm -rf \$CLINIT
 EOF
 chmod uog+x ~/.multipass/bin/multipass
