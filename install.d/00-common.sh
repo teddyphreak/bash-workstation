@@ -8,4 +8,4 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt autoclean -y
 sudo apt autoremove -y
-sudo apt install ubuntu-restricted-extras libxml2-dev libxslt1-dev build-essential xsel httpie silversearcher-ag -y
+sudo apt install ubuntu-restricted-extras libxml2-dev libxslt1-dev xsel httpie silversearcher-ag -y

@@ -33,10 +33,16 @@ while [[ \$# -gt 0 ]]; do
 done
 set -- "\${ARGS[@]}"
 
-# determine extra arguments and post commands
+# initialize vars and interrupt handlers
 CMDS=()
 EXTRA_ARGS=""
 CLINIT=\$(mktemp "./.cloudinit.XXXXXXXXXXXX.yaml")
+trap cleanup INT
+function cleanup() {
+    rm -rf \$CLINIT
+}
+
+# determine extra arguments and post commands
 if [ -f ~/.ssh/id_rsa.pub ]; then
 	if (( \$# > 0 )); then
 		if [[ "\$1" == "ssh" ]]; then
@@ -84,7 +90,7 @@ for CMD in "\${CMDS[@]}"; do
    \$CMD
 done
 
-rm -rf \$CLINIT
+cleanup
 EOF
 chmod uog+x ~/.multipass/bin/multipass
 
