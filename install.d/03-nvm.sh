@@ -13,4 +13,4 @@ DONE
 . ~/.nvm/nvm.sh
 nvm install $NVM_RELEASE
 nvm use $NVM_RELEASE
-npm install -g ionic
+npm install -g @ionic/cli
