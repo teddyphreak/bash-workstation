@@ -16,3 +16,24 @@ sudo apt install -y \
      httpie \
      silversearcher-ag \
      xkcdpass
+
+cat <<EOF > ~/.bash_profile
+# ~/.bash_profile: executed by the command interpreter for login shells.
+
+# Because of this file's existence, neither ~/.bash_login nor ~/.profile
+# will be sourced.
+
+# See /usr/share/doc/bash/examples/startup-files for examples.
+# The files are located in the bash-doc package.
+
+# Because ~/.profile isn't invoked if this files exists,
+# we must source ~/.profile to get its settings:
+
+if [ -r ~/.profile ]; then
+   . "$HOME/.profile"
+fi
+
+if [ -r ~/.bashrc ]; then
+   . "$HOME/.bashrc"
+fi
+EOF
