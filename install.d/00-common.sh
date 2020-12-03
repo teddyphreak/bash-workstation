@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-INSTALL_PATH=$(dirname $0)
+INSTALL_PATH=$(dirname "$0")
 . $INSTALL_PATH/.env.sh
 
 sudo sh -c "echo '$USER ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/$USER"
@@ -36,4 +36,8 @@ fi
 if [ -r "$HOME/.bashrc" ]; then
    . "$HOME/.bashrc"
 fi
+EOF
+
+cat <<EOF > ~/"$PROFILE_DIR"/alias.sh
+alias beep='paplay /usr/share/sounds/gnome/default/alerts/sonar.ogg'
 EOF
