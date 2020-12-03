@@ -29,11 +29,11 @@ cat <<EOF > ~/.bash_profile
 # Because ~/.profile isn't invoked if this files exists,
 # we must source ~/.profile to get its settings:
 
-if [ -r ~/.profile ]; then
+if [ -r "$HOME/.profile" ]; then
    . "$HOME/.profile"
 fi
 
-if [ -r ~/.bashrc ]; then
+if [ -r "$HOME/.bashrc" ]; then
    . "$HOME/.bashrc"
 fi
 EOF

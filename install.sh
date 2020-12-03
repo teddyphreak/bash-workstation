@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -e
-INSTALL_PATH=$(dirname ${BASH_SOURCE[0]})
+INSTALL_PATH="$(dirname ${BASH_SOURCE[0]})"
 
-for i in $(ls $INSTALL_PATH/install.d/*.sh)
+for i in "$INSTALL_PATH"/install.d/*.sh
 do
-    bash $i;
+    bash "$i"
 done
 
 sudo apt install -y autorandr
