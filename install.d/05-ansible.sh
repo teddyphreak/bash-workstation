@@ -11,12 +11,12 @@ cat <<-DONE > $ansibleenvfile
 ANSIBLE_VAULT_IDENTITY_LIST=""
 for i in ~/.ansible_vault/*; do
     if [ -r \$i ]; then
-        VAULT_NAME=\$(basename \$i)
+        VAULT_NAME=\$(basename \$i);
         VAULT="\$VAULT_NAME@\$i";
         if [[ \$ANSIBLE_VAULT_IDENTITY_LIST == "" ]]; then
-            ANSIBLE_VAULT_IDENTITY_LIST="\$VAULT"
+            ANSIBLE_VAULT_IDENTITY_LIST="\$VAULT";
         else
-            ANSIBLE_VAULT_IDENTITY_LIST="\$ANSIBLE_VAULT_IDENTITY_LIST,\$VAULT"
+            ANSIBLE_VAULT_IDENTITY_LIST="\$ANSIBLE_VAULT_IDENTITY_LIST,\$VAULT";
         fi
     fi
 done
