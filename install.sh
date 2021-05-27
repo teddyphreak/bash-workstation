@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-INSTALL_PATH="$(dirname ${BASH_SOURCE[0]})"
+INSTALL_PATH=$(dirname "${BASH_SOURCE[0]}")
 
 for i in "$INSTALL_PATH"/install.d/*.sh
 do

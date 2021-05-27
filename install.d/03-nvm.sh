@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
+# shellcheck source=/dev/null
+
 set -e
 NVM_RELEASE=lts/erbium
-INSTALL_PATH=$(dirname $0)
-. $INSTALL_PATH/.env.sh
+INSTALL_PATH=$(dirname "$0")
+. "$INSTALL_PATH/.env.sh"
 
 curl -s https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | PROFILE=/dev/null bash
 cat <<-DONE > ~/$PROFILE_DIR/nvm.sh

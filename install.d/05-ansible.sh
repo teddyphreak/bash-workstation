@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
-INSTALL_PATH=$(dirname ${BASH_SOURCE[0]})
-. $INSTALL_PATH/.env.sh
+# shellcheck source=/dev/null
+
+INSTALL_PATH=$(dirname "${BASH_SOURCE[0]}")
+. "$INSTALL_PATH/.env.sh"
 
 sudo apt-get install -y libcurl4-gnutls-dev libgnutls28-dev libxml2-dev
 if [ ! -d ~/.ansible_vault ]; then
     mkdir ~/.ansible_vault
 fi
 ansibleenvfile=~/$PROFILE_DIR/ansible.sh
-cat <<-DONE > $ansibleenvfile
+cat <<-DONE > "$ansibleenvfile"
 ANSIBLE_VAULT_IDENTITY_LIST=""
 for i in ~/.ansible_vault/*; do
     if [ -r \$i ]; then
@@ -22,5 +24,5 @@ for i in ~/.ansible_vault/*; do
 done
 export ANSIBLE_VAULT_IDENTITY_LIST
 DONE
-chmod 755 $ansibleenvfile
-. $ansibleenvfile
+chmod 755 "$ansibleenvfile"
+. "$ansibleenvfile"

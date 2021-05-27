@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 # vim: ts=2 sw=2 noet :
+# shellcheck source=/dev/null
+
 set -e
 
-INSTALL_PATH=$(dirname $0)
-. $INSTALL_PATH/.env.sh
+INSTALL_PATH=$(dirname "$0")
+. "$INSTALL_PATH/.env.sh"
 
-MULTIPASS=/snap/bin/multipass
-if [ ! -f $MULTIPASS ]; then
+if ! command -v multipass > /dev/null ; then
     sudo snap install multipass --classic
 fi
 
@@ -36,7 +37,7 @@ set -- "\${ARGS[@]}"
 # initialize vars and interrupt handlers
 CMDS=()
 EXTRA_ARGS=""
-CLINIT=\$(mktemp "./.cloudinit.XXXXXXXXXXXX.yaml")
+CLINIT=\$(mktemp "./cloudinit.XXXXXXXXXXXX.yaml")
 trap cleanup INT
 function cleanup() {
     rm -rf \$CLINIT
@@ -92,8 +93,8 @@ done
 
 cleanup
 EOF
-chmod uog+x ~/.multipass/bin/multipass
+chmod uog+x "$HOME/.multipass/bin/multipass"
 
-cat <<EOF > ~/$PROFILE_DIR/multipass.sh
+cat <<EOF > "$HOME/$PROFILE_DIR/multipass.sh"
 export PATH="/home/$USER/.multipass/bin:\$PATH"
 EOF

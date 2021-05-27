@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
+# shellcheck source=/dev/null
 # vim: ts=2 sw=2 noet :
+
 set -e
 
 INSTALL_PATH=$(dirname "$0")
-. $INSTALL_PATH/.env.sh
+. "$INSTALL_PATH/.env.sh"
 
 sudo apt install -y git
 

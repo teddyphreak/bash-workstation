@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
+# shellcheck source=/dev/null
+
 INSTALL_PATH=$(dirname $0)
-. $INSTALL_PATH/.env.sh
+. "$INSTALL_PATH/.env.sh"
 
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
 sudo apt-add-repository https://cli.github.com/packages

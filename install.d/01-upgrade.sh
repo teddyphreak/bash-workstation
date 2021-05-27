@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
-INSTALL_PATH=$(dirname ${BASH_SOURCE[0]})
-. $INSTALL_PATH/.env.sh
+# shellcheck source=/dev/null
+
+
+INSTALL_PATH=$(dirname "${BASH_SOURCE[0]}")
+. "$INSTALL_PATH/.env.sh"
 
 sudo sed -ie 's/cr\./us./g' /etc/apt/sources.list
 sudo apt update

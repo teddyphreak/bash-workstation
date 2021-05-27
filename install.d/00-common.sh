@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
+# shellcheck source=/dev/null
+
 INSTALL_PATH=$(dirname "$0")
-. $INSTALL_PATH/.env.sh
+. "$INSTALL_PATH/.env.sh"
 
 sudo sh -c "echo '$USER ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/$USER"
 sudo sed -ie 's/cr\.archive\.ubuntu\.com/us.archive.ubuntu.com/g' /etc/apt/sources.list
@@ -38,6 +40,6 @@ if [ -r "$HOME/.bashrc" ]; then
 fi
 EOF
 
-cat <<EOF > ~/"$PROFILE_DIR"/alias.sh
+cat <<EOF > "$HOME/$PROFILE_DIR/alias.sh"
 alias beep='paplay /usr/share/sounds/gnome/default/alerts/sonar.ogg'
 EOF

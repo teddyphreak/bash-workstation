@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
+# shellcheck source=/dev/null
+
 INSTALL_PATH=$(dirname ${BASH_SOURCE[0]})
-. $INSTALL_PATH/.env.sh
+. "$INSTALL_PATH/.env.sh"
 
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y curl git arandr openssh-server pavucontrol python3 python3-pip tree python-is-python3
-if [ ! -d ~/$PROFILE_DIR ]; then
-    rm -rf ~/$PROFILE_DIR
-    mkdir -p ~/$PROFILE_DIR
+if [ ! -d "$HOME/$PROFILE_DIR" ]; then
+    rm -rf "${HOME:?}/$PROFILE_DIR"
+    mkdir -p "$HOME/$PROFILE_DIR"
 fi
 if [ ! -d ~/.pyenv ]; then
     rm -rf ~/.pyenv
@@ -21,16 +23,16 @@ eval "\$(pyenv init -)"
 eval "\$(pyenv virtualenv-init -)"
 DONE
 chmod 755 $pyenvfile
-. $pyenvfile
-pyenv3=$(pyenv install --list | grep "^ *3" | egrep -v "(dev|rc)" | tail -1 | sed -s 's/ +//g')
-if [[ ! $(pyenv versions | grep $pyenv3) ]] ; then
+. "$pyenvfile"
+pyenv3=$(pyenv install --list | grep "^ *3" | grep -Ev "(dev|rc)" | tail -1 | sed -s 's/ +//g')
+if ! pyenv versions | grep "$pyenv3" ; then
     sudo apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev \
          libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
          xz-utils tk-dev libffi-dev liblzma-dev python-openssl
     pyenv install $pyenv3
 fi
 if [[ ! $(pyenv versions | grep ansible) ]] ; then
-    pyenv virtualenv $pyenv3 ansible
+    pyenv virtualenv "$pyenv3" ansible
 fi
 pyenv shell ansible
 eval "$(pyenv init -)"

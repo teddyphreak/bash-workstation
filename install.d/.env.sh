@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-PROFILE_DIR=.profile.d
+export PROFILE_DIR=.profile.d
