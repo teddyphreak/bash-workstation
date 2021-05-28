@@ -44,3 +44,5 @@ EOF
 cat <<EOF > "$HOME/$PROFILE_DIR/alias.sh"
 alias beep='paplay /usr/share/sounds/gnome/default/alerts/sonar.ogg'
 EOF
+
+touch "$HOME/$PROFILE_DIR/.ignore"
