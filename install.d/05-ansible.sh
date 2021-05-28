@@ -22,7 +22,9 @@ for i in ~/.ansible_vault/*; do
         fi
     fi
 done
-export ANSIBLE_VAULT_IDENTITY_LIST
+if [[ "$ANSIBLE_VAULT_IDENTITY_LIST" != "" ]]; then
+    export ANSIBLE_VAULT_IDENTITY_LIST
+fi
 DONE
 chmod 755 "$ansibleenvfile"
 . "$ansibleenvfile"
