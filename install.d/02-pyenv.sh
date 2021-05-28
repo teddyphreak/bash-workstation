@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck source=/dev/null
 
+set -e
 INSTALL_PATH=$(dirname ${BASH_SOURCE[0]})
 . "$INSTALL_PATH/.env.sh"
 
@@ -16,7 +17,7 @@ if [ ! -d ~/.pyenv ]; then
     curl -s https://pyenv.run | bash
 fi
 pyenvfile=~/$PROFILE_DIR/pyenv.sh
-touch $pyenvfile
+touch "$pyenvfile"
 cat <<-DONE > $pyenvfile
 export PATH="/home/$USER/.pyenv/bin:\$PATH"
 eval "\$(pyenv init -)"
