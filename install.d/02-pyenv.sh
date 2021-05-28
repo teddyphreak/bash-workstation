@@ -26,13 +26,13 @@ DONE
 chmod 755 "$pyenvfile"
 . "$pyenvfile"
 pyenv3=$(pyenv install --list | grep "^ *3" | grep -Ev "(dev|rc)" | tail -1 | sed -s 's/ +//g')
-if ! pyenv versions | grep "$pyenv3" ; then
+if ! pyenv versions --bare | grep "$pyenv3" ; then
     sudo apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev \
          libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
          xz-utils tk-dev libffi-dev liblzma-dev python-openssl
-    pyenv install $pyenv3
+    pyenv install "$pyenv3"
 fi
-if ! pyenv versions | grep ansible ; then
+if ! pyenv versions --bare | grep ansible ; then
     pyenv virtualenv "$pyenv3" ansible
 fi
 pyenv shell ansible
