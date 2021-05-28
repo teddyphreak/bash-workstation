@@ -10,6 +10,7 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt autoclean -y
 sudo apt autoremove -y
+echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 sudo apt install -y \
      ubuntu-restricted-extras \
      libxml2-dev \
