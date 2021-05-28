@@ -18,13 +18,22 @@ if [ ! -d ~/.pyenv ]; then
 fi
 pyenvfile=~/$PROFILE_DIR/pyenv.sh
 touch "$pyenvfile"
-cat <<-DONE > $pyenvfile
-export PATH="/home/$USER/.pyenv/bin:\$PATH"
-eval "\$(pyenv init -)"
-eval "\$(pyenv virtualenv-init -)"
+cat <<-DONE > "$pyenvfile"
+export PYENV_ROOT="/home/$USER/.pyenv"
+export PATH="\$PYENV_ROOT/bin:\$PATH"
+eval "\$(pyenv init --path)"
 DONE
 chmod 755 "$pyenvfile"
+
+if ! grep "pyenv init" ~/.bashrc ; then
+cat <<EOF >> ~/.bashrc
+eval "\$(pyenv init -)"
+EOF
+fi
+
 . "$pyenvfile"
+eval "$(pyenv init -)"
+
 pyenv3=$(pyenv install --list | grep "^ *3" | grep -Ev "(dev|rc)" | tail -1 | sed -s 's/ *//g')
 if ! pyenv versions --bare | grep "$pyenv3" ; then
     sudo apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev \
@@ -38,7 +47,7 @@ if ! pyenv versions --bare | grep ansible ; then
     pyenv virtualenv "$pyenv3" ansible
 fi
 pyenv shell ansible
-eval "$(pyenv init -)"
+eval "$(pyenv init --path)"
 pip install --upgrade pip
 pip install ansible
 pip install cookiecutter
@@ -49,5 +58,5 @@ if ! pyenv versions --bare | grep jupyter ; then
     pyenv virtualenv "$pyenv3" jupyter
 fi
 pyenv shell jupyter
-eval "$(pyenv init -)"
+eval "$(pyenv init --path)"
 pip install jupyter-console
