@@ -24,6 +24,8 @@ for i in ~/.ansible_vault/*; do
 done
 if [[ "$ANSIBLE_VAULT_IDENTITY_LIST" != "" ]]; then
     export ANSIBLE_VAULT_IDENTITY_LIST
+else
+    unset ANSIBLE_VAULT_IDENTITY_LIST
 fi
 DONE
 chmod 755 "$ansibleenvfile"
