@@ -32,6 +32,8 @@ if ! pyenv versions --bare | grep "$pyenv3" ; then
          xz-utils tk-dev libffi-dev liblzma-dev python-openssl
     pyenv install "$pyenv3"
 fi
+
+# Configure ansible virtualenv
 if ! pyenv versions --bare | grep ansible ; then
     pyenv virtualenv "$pyenv3" ansible
 fi
@@ -40,3 +42,12 @@ eval "$(pyenv init -)"
 pip install --upgrade pip
 pip install ansible
 pip install cookiecutter
+pip install molecule[docker]
+
+# Configure ansible virtualenv
+if ! pyenv versions --bare | grep jupyter ; then
+    pyenv virtualenv "$pyenv3" jupyter
+fi
+pyenv shell jupyter
+eval "$(pyenv init -)"
+pip install jupyter-console
