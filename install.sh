@@ -9,6 +9,7 @@ KO=1
 
 GUI=$KO
 DOCKER=$KO
+YUBICO=$KO
 ANSIBLE=$OK
 
 # detect argument name
@@ -23,6 +24,11 @@ while [[ $# -gt 0 ]]; do
         ;;
         --docker)
         DOCKER=$OK
+        ARGS+=("$1")
+        shift
+        ;;
+        --yubico)
+        YUBICO=$OK
         ARGS+=("$1")
         shift
         ;;
@@ -61,6 +67,11 @@ fi
 
 if [[ $DOCKER == "$OK" ]]; then
     curl -s https://raw.githubusercontent.com/nephelaiio/ansible-role-docker/master/install.sh | bash
+fi
+
+if [[ $YUBICO == "$OK" ]]; then
+    ansible localhost -m apt_repository -a "repo=ppa:yubico/stable" --become >/dev/null 2>&1
+    ansible localhost -m apt -a "name=['yubikey-manager', 'libpam-yubico', 'libpam-u2f']" --become >/dev/null 2>&1
 fi
 
 unset PYENV_VERSION
