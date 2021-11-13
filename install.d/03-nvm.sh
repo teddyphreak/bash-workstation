@@ -2,7 +2,6 @@
 # shellcheck source=/dev/null
 
 set -e
-NVM_RELEASE=lts/erbium
 INSTALL_PATH=$(dirname "$0")
 . "$INSTALL_PATH/.env.sh"
 
@@ -13,6 +12,6 @@ export NVM_DIR="\$HOME/.nvm"
 [ -s "\$NVM_DIR/bash_completion" ] && \. "\$NVM_DIR/bash_completion"
 DONE
 . ~/.nvm/nvm.sh
-nvm install $NVM_RELEASE
-nvm use $NVM_RELEASE
-npm install -g @ionic/cli
+nvm install --lts
+nvm use --lts
+nvm alias default "$(nvm current)"
