@@ -42,9 +42,9 @@ set -- "\${ARGS[@]}"
 
 if ! type -p "ansible"; then
     ANSIBLE=$KO
-    sudo apt-get install -y ansible
 fi
 
+sudo apt-get install -y ansible
 ansible localhost -m apt -a "name=git" --become >/dev/null 2>&1
 ansible localhost -m snap -a "name=yq" --become >/dev/null 2>&1
 
