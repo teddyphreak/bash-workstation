@@ -2,11 +2,6 @@
 set -e
 INSTALL_PATH=$(dirname "${BASH_SOURCE[0]}")
 
-for i in "$INSTALL_PATH"/install.d/*.sh
-do
-    bash "$i"
-done
-
 OK=0
 KO=1
 
