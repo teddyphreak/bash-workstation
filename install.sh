@@ -12,6 +12,7 @@ KO=1
 
 GUI=$KO
 DOCKER=$KO
+ANSIBLE=$OK
 
 # detect argument name
 ARGS=()
@@ -36,6 +37,11 @@ while [[ $# -gt 0 ]]; do
 done
 set -- "\${ARGS[@]}"
 
+if ! type -p "ansible"; then
+    ANSIBLE=$KO
+    sudo apt-get install -y ansible
+fi
+
 curl -s https://raw.githubusercontent.com/nephelaiio/ansible-role-bash/master/install.sh | bash
 curl -s https://raw.githubusercontent.com/nephelaiio/ansible-role-emacs/master/install.sh | bash
 curl -s https://raw.githubusercontent.com/nephelaiio/ansible-role-tmux/master/install.sh | bash
@@ -53,5 +59,9 @@ if [[ $DOCKER == "$OK" ]]; then
 fi
 
 unset PYENV_VERSION
+
+if [[ $ANSIBLE == "$KO" ]]; then
+    sudo apt-get purge -y ansible
+fi
 
 sudo apt-get autoremove -y
