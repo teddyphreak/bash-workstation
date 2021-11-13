@@ -47,7 +47,10 @@ sudo ansible localhost -m snap -a "name=yq"
 unset ANSIBLE_LOAD_CALLBACK_PLUGINS
 unset ANSIBLE_STDOUT_CALLBACK
 
-yq e '.[]' <(ansible-galaxy role list 2>/dev/null | cut -d, -f1) | xargs ansible-galaxy role remove
+ANSIBLE_ROLES=$(yq e '.[]' <(ansible-galaxy role list 2>/dev/null | cut -d, -f1) | xargs)
+if [ -z "$ANSIBLE_ROLES" ]; then
+    ansible-galaxy role remove $ANSIBLE_ROLES
+fi
 
 curl -s https://raw.githubusercontent.com/nephelaiio/ansible-role-bash/master/install.sh | bash
 curl -s https://raw.githubusercontent.com/nephelaiio/ansible-role-emacs/master/install.sh | bash
