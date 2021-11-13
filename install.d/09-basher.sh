@@ -22,7 +22,7 @@ if [ ! -d "${HOME:?}/$PROFILE_DIR" ]; then
 fi
 
 cat <<-DONE > "$BASHER_INIT"
-export PATH="$HOME/.basher/bin:$PATH"
+export PATH="$HOME/.basher/bin:\$PATH"
 eval "\$(basher init - bash)"
 DONE
 export PATH="$HOME/.basher/bin:$PATH"

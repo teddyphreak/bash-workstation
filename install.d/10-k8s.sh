@@ -56,7 +56,7 @@ if [ ! -d ~/.krew ]; then
 fi
 
 cat <<EOF > "$HOME/$PROFILE_DIR/krew.sh"
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:\$PATH"
 EOF
 
 # Install k8s operator sdk
@@ -88,5 +88,5 @@ curl -s \
 chmod 0755 $OPERATOR_PATH/*
 
 cat <<-DONE > "$OPERATOR_PROFILE"
-export PATH="$OPERATOR_PATH:$PATH"
+export PATH="$OPERATOR_PATH:\$PATH"
 DONE
