@@ -36,6 +36,7 @@ if ! type -p "ansible"; then
     ANSIBLE=$KO
     sudo apt-get install -y ansible
 fi
+sudo apt-get install -y git
 
 curl -s https://raw.githubusercontent.com/nephelaiio/ansible-role-bash/master/install.sh | bash
 curl -s https://raw.githubusercontent.com/nephelaiio/ansible-role-emacs/master/install.sh | bash
