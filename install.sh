@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+export ANSIBLE_LOAD_CALLBACK_PLUGINS=true
+export ANSIBLE_STDOUT_CALLBACK=json
+
 OK=0
 KO=1
 
@@ -35,8 +38,14 @@ if ! type -p "ansible"; then
     ANSIBLE=$KO
     sudo apt-get install -y ansible
 fi
+export ANSIBLE_LOAD_CALLBACK_PLUGINS=true
+export ANSIBLE_STDOUT_CALLBACK=json
+
 sudo ansible localhost -m apt -a "name=git"
 sudo ansible localhost -m snap -a "name=yq"
+
+unset ANSIBLE_LOAD_CALLBACK_PLUGINS
+unset ANSIBLE_STDOUT_CALLBACK
 
 yq e '.[]' <(ansible-galaxy role list 2>/dev/null | cut -d, -f1) | xargs ansible-galaxy role remove
 
@@ -58,9 +67,15 @@ fi
 
 unset PYENV_VERSION
 
+export ANSIBLE_LOAD_CALLBACK_PLUGINS=true
+export ANSIBLE_STDOUT_CALLBACK=json
+
 if [[ $ANSIBLE == "$KO" ]]; then
     sudo ansible localhost -m apt -a "name=ansible state=absent purge=yes"
 fi
 
 sudo ansible localhost -m apt -a "upgrade=safe"
 sudo ansible localhost -m apt -a "autoremove=yes"
+
+unset ANSIBLE_LOAD_CALLBACK_PLUGINS
+unset ANSIBLE_STDOUT_CALLBACK
