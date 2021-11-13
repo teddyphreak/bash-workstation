@@ -1,4 +1,4 @@
 # Personal workstation / dotfile repository
 
 ## Installation
-https://raw.githubusercontent.com/teddyphreak/bash-workstation/master/install.sh
+curl -s https://raw.githubusercontent.com/teddyphreak/bash-workstation/master/install.sh | bash -- # --gui --docker
