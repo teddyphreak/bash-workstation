@@ -48,7 +48,7 @@ unset ANSIBLE_LOAD_CALLBACK_PLUGINS
 unset ANSIBLE_STDOUT_CALLBACK
 
 ANSIBLE_ROLES=$(yq e '.[]' <(ansible-galaxy role list 2>/dev/null | cut -d, -f1) | xargs)
-if [ -z "$ANSIBLE_ROLES" ]; then
+if [ ! -z "$ANSIBLE_ROLES" ]; then
     ansible-galaxy role remove $ANSIBLE_ROLES
 fi
 
