@@ -38,17 +38,12 @@ if ! type -p "ansible"; then
     ANSIBLE=$KO
     sudo apt-get install -y ansible
 fi
-export ANSIBLE_LOAD_CALLBACK_PLUGINS=true
-export ANSIBLE_STDOUT_CALLBACK=json
 
-sudo ansible localhost -m apt -a "name=git"
-sudo ansible localhost -m snap -a "name=yq"
-
-unset ANSIBLE_LOAD_CALLBACK_PLUGINS
-unset ANSIBLE_STDOUT_CALLBACK
+ansible localhost -m apt -a "name=git" --become >/dev/null 2>&1
+ansible localhost -m snap -a "name=yq" --become >/dev/null 2>&1
 
 ANSIBLE_ROLES=$(yq e '.[]' <(ansible-galaxy role list 2>/dev/null | cut -d, -f1) | xargs)
-if [ ! -z "$ANSIBLE_ROLES" ]; then
+if [ -n "$ANSIBLE_ROLES" ]; then
     ansible-galaxy role remove $ANSIBLE_ROLES
 fi
 
@@ -60,7 +55,7 @@ curl -s https://raw.githubusercontent.com/nephelaiio/ansible-role-vim/master/ins
 export PYENV_VERSION=ansible
 
 if [[ $GUI == "$OK" ]]; then
-    sudo ansible localhost -m apt -a "name=autorandr"
+    ansible localhost -m apt -a "name=autorandr" --become >/dev/null 2>&1
     curl -s https://raw.githubusercontent.com/nephelaiio/ansible-role-i3/master/install.sh | bash
 fi
 
@@ -70,15 +65,9 @@ fi
 
 unset PYENV_VERSION
 
-export ANSIBLE_LOAD_CALLBACK_PLUGINS=true
-export ANSIBLE_STDOUT_CALLBACK=json
-
 if [[ $ANSIBLE == "$KO" ]]; then
-    sudo ansible localhost -m apt -a "name=ansible state=absent purge=yes"
+    ansible localhost -m apt -a "name=ansible state=absent purge=yes" --become >/dev/null 2>&1
 fi
 
-sudo ansible localhost -m apt -a "upgrade=safe"
-sudo ansible localhost -m apt -a "autoremove=yes"
-
-unset ANSIBLE_LOAD_CALLBACK_PLUGINS
-unset ANSIBLE_STDOUT_CALLBACK
+ansible localhost -m apt -a "upgrade=safe" --become >/dev/null 2>&1
+ansible localhost -m apt -a "autoremove=yes" --become >/dev/null 2>&1
